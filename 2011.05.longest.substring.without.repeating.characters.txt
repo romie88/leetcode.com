@@ -1,0 +1,79 @@
+/**
+ * http://leetcode.com/2011/05/longest-substring-without-repeating-characters.html
+ * Longest Substring Without Repeating Characters
+ *
+ * May 16, 2011 in string
+ *
+ * Given a string, find the length of the longest substring without repeating
+ * characters. For example, the longest substring without repeating letters
+ * for “abcabcbb” is “abc”, which the length is 3. For “bbbbb” the longest
+ * substring is “b”, with the length of 1.
+ */
+
+Hint:
+Is there a better way other than brute force? Consider the kind of data structure that can improve the run time complexity. An ideal solution requires only a one-time linear scan.
+
+Online Judge
+This problem is available at Online Judge. Head over there and it will judge your solution. Currently only able to compile C++ code. If you are using other languages, you can still verify your solution by looking at the judge’s test cases and its expected output.
+
+Solution:
+How can we can look up if a character had existed in the substring instantaneously? The answer is using a simple table to store the characters that have appeared. Make sure you communicate with your interviewer if the string can have characters other than ‘a’-'z’. (ie, Digits? Upper case letter? Does it contain ASCII characters only? Or even unicode character sets?)
+
+As you traverse through the string, update by using its ASCII value as index to the table. If the string only contains ‘a’-'z’, you could save space by using a table of size 26 only. Assuming c is the character, then c-’a’ will give you a value of 0-25 which can be used to index the table directly.
+
+The next question is to ask yourself what happens when you found a repeated character? For example, if the string is “abcdcedf”, what happens when you reach the second appearance of ‘c’?
+
+When you have found a repeated character (let’s say at index j), it means that the current substring (excluding the repeated character of course) is a potential maximum, so update the maximum if necessary. It also means that the repeated character must have appeared before at an index i, where i is less than j.
+
+Since you know that all substrings that start before or at index i would be less than your current maximum, you can safely start to look for the next substring with head which starts exactly at index i+1.
+
+Therefore, you would need two indices to record the head and the tail of the current substring. Since i and j both traverse at most n steps, the worst case would be 2n steps, which the run time complexity must be O(n).
+
+Below is the implementation in C++. Beware of the common mistake of not updating the maximum after the main loop, which is easy to forget.
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+int lengthOfLongestSubstring(string s) {
+  int n = s.length();
+  int i = 0, j = 0;
+  int maxLen = 0;
+  bool exist[256] = { false };
+  while (j < n) {
+    if (exist[s[j]]) {
+      maxLen = max(maxLen, j-i);
+      while (s[i] != s[j]) {
+        exist[s[i]] = false;
+        i++;
+      }
+      i++;
+      j++;
+    } else {
+      exist[s[j]] = true;
+      j++;
+    }
+  }
+  maxLen = max(maxLen, n-i);
+  return maxLen;
+}
+
