@@ -1,0 +1,38 @@
+/**
+ * http://leetcode.com/2011/05/determine-if-two-rectangles-overlap.html
+ * Determine If Two Rectangles Overlap
+ * 
+ * May 12, 2011 in Uncategorized
+ *
+ * Given two axis-aligned rectangles A and B. Write a function to determine if
+ * the two rectangles overlap.
+ */
+
+Hint:
+If you are coming up with a complicated set of conditionals, you might think too hard. There is an easier way. Try to think in the opposite direction.
+
+
+
+Two overlapping rectangles. A rectangle can be defined by its upper left and lower right corner.
+
+Solution:
+Assume that the two rectangles are given as point (P1, P2) and (P3, P4) respectively. One direct way to attempt this problem is when two rectangles overlap, one rectangle’s corner point(s) must contain in the other rectangle. Do keep in mind of the following cases:
+
+  
+
+More overlapping rectangles cases to consider.
+
+As you can see, the conditionals can be pretty complicated as there are a total eight of them. Can we simplify it further?
+
+A much easier and better approach would be to think from the opposite. How about asking yourself how the two rectangles cannot overlap each other? Two rectangles do not overlap when one is above/below, or to the left/right of the other rectangle.
+
+The condition’s expression is:
+
+! ( P2.y < P3.y || P1.y > P4.y || P2.x < P3.x || P1.x > P4.x )
+Using De Morgan’s law, we can further simplify the above expression to:
+
+( P2.y = P3.y && P1.y = P4.y && P2.x = P3.x && P1.x = P4.x )
+Further Thoughts:
+
+What if the two rectangles are not necessarily axis-aligned? (That is, the rectangles can be rotated around its center at a certain angle.) Solving this problem requires more Math and understanding of linear algebra, so if you’re interested see my post on: How to determine if a point is inside a rectangle.
+Given a list of rectangles, how would you determine the set of overlapping rectangles efficiently? Why would this be useful? Imagine you have a number of windows opened on your desktop. The operating system would need to know the overlapped windows in order to repaint the dirty region as windows are being moved around.
